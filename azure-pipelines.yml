@@ -1,0 +1,30 @@
+trigger:
+- main  # Triggers the pipeline on pushes to the main branch
+
+pool:
+  vmImage: 'ubuntu-latest'  # Use a virtual machine for the build
+
+steps:
+- task: UseNode@2  # Use Node.js (Optional, change for other languages)
+  inputs:
+    version: '16.x'
+
+- script: |
+    echo Installing dependencies...
+    npm install
+  displayName: 'Install dependencies'
+
+- script: |
+    echo Running tests...
+    npm test
+  displayName: 'Run tests'
+
+- script: |
+    echo Building application...
+    npm run build
+  displayName: 'Build application'
+
+- task: PublishBuildArtifacts@1  # Upload build artifacts
+  inputs:
+    pathToPublish: 'dist'
+    artifactName: 'drop'
